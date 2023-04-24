@@ -79,8 +79,6 @@ public class CoverArtController implements LastModified {
     @Autowired
     private PlaylistService playlistService;
     @Autowired
-    private PodcastService podcastService;
-    @Autowired
     private ArtistDao artistDao;
     @Autowired
     private AlbumDao albumDao;
@@ -150,9 +148,6 @@ public class CoverArtController implements LastModified {
         if (id.startsWith(PLAYLIST_COVERART_PREFIX)) {
             return createPlaylistCoverArtRequest(Integer.valueOf(id.replace(PLAYLIST_COVERART_PREFIX, "")));
         }
-        if (id.startsWith(PODCAST_COVERART_PREFIX)) {
-            return createPodcastCoverArtRequest(Integer.valueOf(id.replace(PODCAST_COVERART_PREFIX, "")), request);
-        }
         return createMediaFileCoverArtRequest(Integer.valueOf(id), request);
     }
 
@@ -169,17 +164,6 @@ public class CoverArtController implements LastModified {
     private PlaylistCoverArtRequest createPlaylistCoverArtRequest(int id) {
         Playlist playlist = playlistService.getPlaylist(id);
         return playlist == null ? null : new PlaylistCoverArtRequest(playlist);
-    }
-
-    private CoverArtRequest createPodcastCoverArtRequest(int id, HttpServletRequest request) {
-        PodcastChannel channel = podcastService.getChannel(id);
-        if (channel == null) {
-            return null;
-        }
-        if (channel.getMediaFileId() == null) {
-            return new PodcastCoverArtRequest(channel);
-        }
-        return createMediaFileCoverArtRequest(channel.getMediaFileId(), request);
     }
 
     private CoverArtRequest createMediaFileCoverArtRequest(int id, HttpServletRequest request) {

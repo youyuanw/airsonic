@@ -60,7 +60,6 @@ public class UserDao extends AbstractDao {
     private static final Integer ROLE_ID_PLAYLIST = 4;
     private static final Integer ROLE_ID_COVER_ART = 5;
     private static final Integer ROLE_ID_COMMENT = 6;
-    private static final Integer ROLE_ID_PODCAST = 7;
     private static final Integer ROLE_ID_STREAM = 8;
     private static final Integer ROLE_ID_SETTINGS = 9;
     private static final Integer ROLE_ID_JUKEBOX = 10;
@@ -267,8 +266,6 @@ public class UserDao extends AbstractDao {
                 user.setCoverArtRole(true);
             } else if (ROLE_ID_COMMENT.equals(role)) {
                 user.setCommentRole(true);
-            } else if (ROLE_ID_PODCAST.equals(role)) {
-                user.setPodcastRole(true);
             } else if (ROLE_ID_STREAM.equals(role)) {
                 user.setStreamRole(true);
             } else if (ROLE_ID_SETTINGS.equals(role)) {
@@ -304,9 +301,6 @@ public class UserDao extends AbstractDao {
         }
         if (user.isCommentRole()) {
             getJdbcTemplate().update(sql, user.getUsername(), ROLE_ID_COMMENT);
-        }
-        if (user.isPodcastRole()) {
-            getJdbcTemplate().update(sql, user.getUsername(), ROLE_ID_PODCAST);
         }
         if (user.isStreamRole()) {
             getJdbcTemplate().update(sql, user.getUsername(), ROLE_ID_STREAM);

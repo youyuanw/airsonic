@@ -39,7 +39,6 @@ public class UserDaoTestCase extends DaoTestCaseBean2 {
         user.setDownloadRole(false);
         user.setPlaylistRole(true);
         user.setUploadRole(false);
-        user.setPodcastRole(true);
         user.setStreamRole(true);
         user.setJukeboxRole(true);
         user.setSettingsRole(true);
@@ -79,7 +78,6 @@ public class UserDaoTestCase extends DaoTestCaseBean2 {
         user.setDownloadRole(false);
         user.setPlaylistRole(true);
         user.setUploadRole(false);
-        user.setPodcastRole(true);
         user.setStreamRole(true);
         user.setJukeboxRole(true);
         user.setSettingsRole(true);
@@ -97,7 +95,6 @@ public class UserDaoTestCase extends DaoTestCaseBean2 {
         user.setDownloadRole(true);
         user.setPlaylistRole(false);
         user.setUploadRole(true);
-        user.setPodcastRole(false);
         user.setStreamRole(false);
         user.setJukeboxRole(false);
         user.setSettingsRole(false);
@@ -148,7 +145,6 @@ public class UserDaoTestCase extends DaoTestCaseBean2 {
         User user = new User("sindre", "secret", null);
         user.setAdminRole(true);
         user.setCommentRole(true);
-        user.setPodcastRole(true);
         user.setStreamRole(true);
         user.setSettingsRole(true);
         userDao.createUser(user);

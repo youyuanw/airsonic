@@ -67,8 +67,6 @@ public class SonosHelper {
     private RatingService ratingService;
     @Autowired
     private LastFmService lastFmService;
-    @Autowired
-    private PodcastService podcastService;
 
     public List<AbstractMedia> forRoot() {
         MediaMetadata shuffle = new MediaMetadata();
@@ -294,32 +292,6 @@ public class SonosHelper {
             mediaCollection.setItemType(ItemType.ALBUM_LIST);
             mediaCollection.setTitle(albumListType.getDescription());
             result.add(mediaCollection);
-        }
-        return result;
-    }
-
-    public List<MediaCollection> forPodcastChannels() {
-        List<MediaCollection> result = new ArrayList<MediaCollection>();
-        for (PodcastChannel channel : podcastService.getAllChannels()) {
-            MediaCollection mediaCollection = new MediaCollection();
-            mediaCollection.setId(SonosService.ID_PODCAST_CHANNEL_PREFIX + channel.getId());
-            mediaCollection.setTitle(channel.getTitle());
-            mediaCollection.setItemType(ItemType.TRACK);
-            result.add(mediaCollection);
-        }
-        return result;
-    }
-
-    public List<AbstractMedia> forPodcastChannel(int channelId, String username, HttpServletRequest request) {
-        List<AbstractMedia> result = new ArrayList<AbstractMedia>();
-        for (PodcastEpisode episode : podcastService.getEpisodes(channelId)) {
-            if (episode.getStatus() == PodcastStatus.COMPLETED) {
-                Integer mediaFileId = episode.getMediaFileId();
-                MediaFile mediaFile = mediaFileService.getMediaFile(mediaFileId);
-                if (mediaFile != null) {
-                    result.add(forMediaFile(mediaFile, username, request));
-                }
-            }
         }
         return result;
     }
@@ -687,9 +659,5 @@ public class SonosHelper {
 
     public void setLastFmService(LastFmService lastFmService) {
         this.lastFmService = lastFmService;
-    }
-
-    public void setPodcastService(PodcastService podcastService) {
-        this.podcastService = podcastService;
     }
 }

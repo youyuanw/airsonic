@@ -43,7 +43,6 @@ public class User {
     private boolean isPlaylistRole;
     private boolean isCoverArtRole;
     private boolean isCommentRole;
-    private boolean isPodcastRole;
     private boolean isStreamRole;
     private boolean isJukeboxRole;
     private boolean isShareRole;
@@ -171,14 +170,6 @@ public class User {
         this.isCoverArtRole = isCoverArtRole;
     }
 
-    public boolean isPodcastRole() {
-        return isPodcastRole;
-    }
-
-    public void setPodcastRole(boolean isPodcastRole) {
-        this.isPodcastRole = isPodcastRole;
-    }
-
     public boolean isStreamRole() {
         return isStreamRole;
     }
@@ -227,9 +218,6 @@ public class User {
         }
         if (isCommentRole) {
             result.append(" [comment]");
-        }
-        if (isPodcastRole) {
-            result.append(" [podcast]");
         }
         if (isStreamRole) {
             result.append(" [stream]");

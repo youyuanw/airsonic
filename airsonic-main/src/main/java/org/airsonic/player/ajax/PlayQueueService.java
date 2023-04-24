@@ -19,7 +19,6 @@
  */
 package org.airsonic.player.ajax;
 
-import com.google.common.collect.Lists;
 import org.airsonic.player.dao.InternetRadioDao;
 import org.airsonic.player.dao.MediaFileDao;
 import org.airsonic.player.dao.PlayQueueDao;
@@ -65,8 +64,6 @@ public class PlayQueueService {
     private SearchService searchService;
     @Autowired
     private RatingService ratingService;
-    @Autowired
-    private PodcastService podcastService;
     @Autowired
     private PlaylistService playlistService;
     @Autowired
@@ -307,70 +304,6 @@ public class PlayQueueService {
 
         List<MusicFolder> musicFolders = settingsService.getMusicFoldersForUser(username);
         List<MediaFile> files = lastFmService.getTopSongs(mediaFileService.getMediaFile(id), 50, musicFolders);
-        if (!files.isEmpty() && startIndex != null) {
-            if (queueFollowingSongs) {
-                files = files.subList(startIndex, files.size());
-            } else {
-                files = Arrays.asList(files.get(startIndex));
-            }
-        }
-
-        Player player = getCurrentPlayer(request, response);
-        return doPlay(request, player, files).setStartPlayerAt(0);
-    }
-
-    public PlayQueueInfo playPodcastChannel(int id) throws Exception {
-        HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
-        HttpServletResponse response = WebContextFactory.get().getHttpServletResponse();
-
-        List<PodcastEpisode> episodes = podcastService.getEpisodes(id);
-        List<MediaFile> files = new ArrayList<MediaFile>();
-        for (PodcastEpisode episode : episodes) {
-            if (episode.getStatus() == PodcastStatus.COMPLETED) {
-                MediaFile mediaFile = mediaFileService.getMediaFile(episode.getMediaFileId());
-                if (mediaFile != null && mediaFile.isPresent()) {
-                    files.add(mediaFile);
-                }
-            }
-        }
-        Player player = getCurrentPlayer(request, response);
-        return doPlay(request, player, files).setStartPlayerAt(0);
-    }
-
-    public PlayQueueInfo playPodcastEpisode(int id) throws Exception {
-        HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
-        HttpServletResponse response = WebContextFactory.get().getHttpServletResponse();
-
-        PodcastEpisode episode = podcastService.getEpisode(id, false);
-        List<PodcastEpisode> allEpisodes = podcastService.getEpisodes(episode.getChannelId());
-        List<MediaFile> files = new ArrayList<MediaFile>();
-
-        String username = securityService.getCurrentUsername(request);
-        boolean queueFollowingSongs = settingsService.getUserSettings(username).isQueueFollowingSongs();
-
-        for (PodcastEpisode ep : allEpisodes) {
-            if (ep.getStatus() == PodcastStatus.COMPLETED) {
-                MediaFile mediaFile = mediaFileService.getMediaFile(ep.getMediaFileId());
-                if (mediaFile != null && mediaFile.isPresent() &&
-                    (ep.getId().equals(episode.getId()) || queueFollowingSongs && !files.isEmpty())) {
-                    files.add(mediaFile);
-                }
-            }
-        }
-        Player player = getCurrentPlayer(request, response);
-        return doPlay(request, player, files).setStartPlayerAt(0);
-    }
-
-    public PlayQueueInfo playNewestPodcastEpisode(Integer startIndex) throws Exception {
-        HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
-        HttpServletResponse response = WebContextFactory.get().getHttpServletResponse();
-
-        List<PodcastEpisode> episodes = podcastService.getNewestEpisodes(10);
-        List<MediaFile> files = Lists.transform(episodes, episode -> mediaFileService.getMediaFile(episode.getMediaFileId()));
-
-        String username = securityService.getCurrentUsername(request);
-        boolean queueFollowingSongs = settingsService.getUserSettings(username).isQueueFollowingSongs();
-
         if (!files.isEmpty() && startIndex != null) {
             if (queueFollowingSongs) {
                 files = files.subList(startIndex, files.size());
@@ -881,10 +814,6 @@ public class PlayQueueService {
 
     public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
-    }
-
-    public void setPodcastService(PodcastService podcastService) {
-        this.podcastService = podcastService;
     }
 
     public void setMediaFileDao(MediaFileDao mediaFileDao) {

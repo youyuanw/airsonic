@@ -173,8 +173,6 @@ public class SonosService implements SonosSoap {
                 media = sonosHelper.forPlaylists(username, request);
             } else if (ID_ALBUMLISTS.equals(id)) {
                 media = sonosHelper.forAlbumLists();
-            } else if (ID_PODCASTS.equals(id)) {
-                media = sonosHelper.forPodcastChannels();
             } else if (ID_STARRED.equals(id)) {
                 media = sonosHelper.forStarred();
             } else if (ID_STARRED_ARTISTS.equals(id)) {
@@ -197,9 +195,6 @@ public class SonosService implements SonosSoap {
             } else if (id.startsWith(ID_ALBUMLIST_PREFIX)) {
                 AlbumListType albumListType = AlbumListType.fromId(id.replace(ID_ALBUMLIST_PREFIX, ""));
                 mediaList = sonosHelper.forAlbumList(albumListType, index, count, username, request);
-            } else if (id.startsWith(ID_PODCAST_CHANNEL_PREFIX)) {
-                int channelId = Integer.parseInt(id.replace(ID_PODCAST_CHANNEL_PREFIX, ""));
-                media = sonosHelper.forPodcastChannel(channelId, username, request);
             } else if (id.startsWith(ID_MUSICFOLDER_PREFIX)) {
                 int musicFolderId = Integer.parseInt(id.replace(ID_MUSICFOLDER_PREFIX, ""));
                 media = sonosHelper.forMusicFolder(musicFolderId, username, request);
